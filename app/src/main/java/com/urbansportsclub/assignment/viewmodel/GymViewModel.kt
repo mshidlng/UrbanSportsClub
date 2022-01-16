@@ -21,7 +21,7 @@ class GymViewModel : ViewModel() {
             val gymsToDisplay = ArrayList<Gym>()
             for (gym in gymCenters.data) {
                 val address =
-                    gym.locations[0].streetName + "\n" + gym.locations[0].city + "\n" + gym.locations[0].zipCode
+                    gym.locations[0].streetName.toString().trim() + ", " + gym.locations[0].city + "\n" + gym.locations[0].zipCode
                 val location = Location("")
                 location.latitude = gym.locations[0].latitude!!
                 location.longitude = gym.locations[0].longitude!!

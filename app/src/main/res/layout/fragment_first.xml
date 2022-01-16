@@ -45,9 +45,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toStartOf="@+id/rewind_button"
-            android:src="@drawable/poop"
+            android:src="@drawable/dislike"
             app:backgroundTint="@android:color/holo_orange_light"
-            app:fabSize="auto"
+            app:maxImageSize="35dp"
             app:rippleColor="#22ED7563" />
 
         <Space
@@ -60,9 +60,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:src="@drawable/heart"
-            app:backgroundTint="#ff0000"
-            app:fabSize="auto"
+            android:src="@drawable/like"
+            app:backgroundTint="#00ff00"
+            app:maxImageSize="35dp"
             app:rippleColor="#226FE2B3" />
 
         <Space
