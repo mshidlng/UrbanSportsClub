@@ -11,13 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.urbansportsclub.assignment.adapter.GymStackAdapter
-import com.urbansportsclub.assignment.databinding.FragmentFirstBinding
+import com.urbansportsclub.assignment.databinding.GymListFragmentBinding
 import com.urbansportsclub.assignment.viewmodel.GymViewModel
 import com.yuyakaido.android.cardstackview.*
 
-class FirstFragment : Fragment(), CardStackListener {
+class GymListFragment : Fragment(), CardStackListener {
 
-    private var _binding: FragmentFirstBinding? = null
+    private var _binding: GymListFragmentBinding? = null
     private val viewModel: GymViewModel by viewModels()
     private val binding get() = _binding!!
     private val mCardStackLayoutManager by lazy { CardStackLayoutManager(activity, this) }
@@ -28,7 +28,7 @@ class FirstFragment : Fragment(), CardStackListener {
         savedInstanceState: Bundle?,
     ): View? {
 
-        _binding = FragmentFirstBinding.inflate(inflater, container, false)
+        _binding = GymListFragmentBinding.inflate(inflater, container, false)
         return binding.root
 
     }
@@ -41,6 +41,18 @@ class FirstFragment : Fragment(), CardStackListener {
         viewModel.success.observe(viewLifecycleOwner, {
             mAdapter = GymStackAdapter((it))
             binding.cardStackView.adapter = mAdapter
+        })
+
+        viewModel.isLoading.observe(viewLifecycleOwner, {
+           if(it){
+               binding.buttonContainer.visibility = View.GONE
+               binding.loading.visibility=View.VISIBLE
+               binding.loading.playAnimation()
+           }else{
+               binding.buttonContainer.visibility = View.VISIBLE
+               binding.loading.pauseAnimation()
+               binding.loading.visibility=View.GONE
+           }
         })
 
         viewModel.getGymData()
@@ -57,7 +69,7 @@ class FirstFragment : Fragment(), CardStackListener {
 
     override fun onCardSwiped(direction: Direction) {
 
-        if(direction.ordinal==1){
+        if (direction.ordinal == 1) {
             binding.animationView.playAnimation()
         }
 

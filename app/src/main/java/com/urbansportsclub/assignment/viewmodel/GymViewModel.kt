@@ -12,9 +12,11 @@ import kotlinx.coroutines.launch
 
 class GymViewModel : ViewModel() {
     val success = MutableLiveData<ArrayList<Gym>>()
+    val isLoading = MutableLiveData<Boolean>()
     private var apiService: ApiService = RetrofitBuilder.getRetrofit()
 
     fun getGymData() {
+        isLoading.value=true
         viewModelScope.launch(Dispatchers.IO) {
             val gymCenters = apiService.getGymCenters()
 
@@ -32,7 +34,7 @@ class GymViewModel : ViewModel() {
                     address = address,
                     location = location))
             }
-
+            isLoading.postValue(false)
             success.postValue(gymsToDisplay)
         }
     }
