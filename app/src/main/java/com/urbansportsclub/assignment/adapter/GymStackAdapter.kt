@@ -1,6 +1,5 @@
 package com.urbansportsclub.assignment.adapter
 
-import android.location.Location
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,6 @@ class GymStackAdapter(
     private var mGyms: List<Gym>,
 ) : RecyclerView.Adapter<GymStackAdapter.ViewHolder>() {
 
-    private lateinit var mUserCurrentLocation: Location
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
