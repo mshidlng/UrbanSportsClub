@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.LinearInterpolator
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -56,6 +57,18 @@ class FirstFragment : Fragment(), CardStackListener {
 
     override fun onCardSwiped(direction: Direction) {
 
+        if(direction.ordinal==1){
+            binding.animationView.playAnimation()
+        }
+
+        if (mCardStackLayoutManager.topPosition == binding.cardStackView.adapter?.itemCount) {
+            Toast.makeText(activity,
+                "You have viewed all the available content... \nRefreshing...",
+                Toast.LENGTH_SHORT).show()
+            mAdapter.clearAdapter()
+            viewModel.getGymData()
+        }
+
     }
 
     override fun onCardRewound() {
@@ -80,7 +93,7 @@ class FirstFragment : Fragment(), CardStackListener {
         binding.skipButton.setOnClickListener {
             val setting = SwipeAnimationSetting.Builder()
                 .setDirection(Direction.Left)
-                .setDuration(Duration.Normal.duration)
+                .setDuration(Duration.Slow.duration)
                 .setInterpolator(AccelerateInterpolator())
                 .build()
             mCardStackLayoutManager.setSwipeAnimationSetting(setting)
@@ -89,13 +102,15 @@ class FirstFragment : Fragment(), CardStackListener {
 
 
         binding.likeButton.setOnClickListener {
+            binding.animationView.playAnimation()
             val setting = SwipeAnimationSetting.Builder()
                 .setDirection(Direction.Right)
-                .setDuration(Duration.Normal.duration)
+                .setDuration(Duration.Slow.duration)
                 .setInterpolator(AccelerateInterpolator())
                 .build()
             mCardStackLayoutManager.setSwipeAnimationSetting(setting)
             binding.cardStackView.swipe()
+
         }
     }
 
