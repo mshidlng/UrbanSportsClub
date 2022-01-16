@@ -10,8 +10,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DefaultItemAnimator
+import com.google.android.material.snackbar.Snackbar
+import com.urbansportsclub.assignment.adapter.Gym
 import com.urbansportsclub.assignment.adapter.GymStackAdapter
 import com.urbansportsclub.assignment.databinding.GymListFragmentBinding
+import com.urbansportsclub.assignment.utils.Status
 import com.urbansportsclub.assignment.viewmodel.GymViewModel
 import com.yuyakaido.android.cardstackview.*
 
@@ -39,23 +42,50 @@ class GymListFragment : Fragment(), CardStackListener {
         setupButton()
 
         viewModel.success.observe(viewLifecycleOwner, {
-            mAdapter = GymStackAdapter((it))
-            binding.cardStackView.adapter = mAdapter
-        })
 
-        viewModel.isLoading.observe(viewLifecycleOwner, {
-           if(it){
-               binding.buttonContainer.visibility = View.GONE
-               binding.loading.visibility=View.VISIBLE
-               binding.loading.playAnimation()
-           }else{
-               binding.buttonContainer.visibility = View.VISIBLE
-               binding.loading.pauseAnimation()
-               binding.loading.visibility=View.GONE
-           }
+            it?.let { resource ->
+                when (resource.status) {
+
+                    Status.LOADING -> {
+                        showLoadingAnimation()
+                    }
+
+                    Status.SUCCESS -> {
+
+                        mAdapter = GymStackAdapter(it.data as List<Gym>)
+                        binding.cardStackView.adapter = mAdapter
+                        stopLoadingAnimation()
+                        binding.buttonContainer.visibility = View.VISIBLE
+                    }
+
+                    Status.ERROR -> {
+                        stopLoadingAnimation()
+                        showErrorSnackBar()
+                    }
+                }
+            }
         })
 
         viewModel.getGymData()
+    }
+
+    private fun showErrorSnackBar() {
+        val snackBar = Snackbar.make(binding.parent,
+            "Error Occurred... Please try again!",
+            Snackbar.LENGTH_SHORT)
+        snackBar.show()
+    }
+
+    private fun showLoadingAnimation() {
+        binding.buttonContainer.visibility = View.GONE
+        binding.loading.visibility = View.VISIBLE
+        binding.loading.playAnimation()
+    }
+
+
+    private fun stopLoadingAnimation() {
+        binding.loading.pauseAnimation()
+        binding.loading.visibility = View.GONE
     }
 
     override fun onDestroyView() {
